@@ -1,34 +1,28 @@
-package io.shiftleft.tarpit;
-
-import io.shiftleft.tarpit.model.Order;
-import io.shiftleft.tarpit.model.User;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.logging.Logger;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@WebServlet(name = "simpleServlet", urlPatterns = {"/getOrderStatus"}, loadOnStartup = 1)
-public class OrderStatus extends HttpServlet {
+public class OrderStatus extends javax.servlet.http.HttpServlet {
 
-  private static final long serialVersionUID = -3462096228274971485L;
+  private static final Logger LOGGER = LogManager.getLogger(OrderStatus.class);
   private Connection connection;
   private PreparedStatement preparedStatement;
   private ResultSet resultSet;
 
-  private final static Logger LOGGER = Logger.getLogger(ServletTarPit.class.getName());
+  private void getConnection() throws SQLException {
+    String url = "jdbc:mysql://localhost:3306/mydb";
+    String username = "root";
+    String password = "password";
+    connection = DriverManager.getConnection(url, username, password);
+  }
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,8 +46,9 @@ public class OrderStatus extends HttpServlet {
 
         getConnection();
 
-        String sql = "SELECT * FROM ORDER WHERE ORDERID = '" + orderId;
+        String sql = "SELECT * FROM ORDER WHERE ORDERID = ?";
         preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, orderId);
 
         resultSet = preparedStatement.executeQuery();
 
@@ -102,12 +97,5 @@ public class OrderStatus extends HttpServlet {
       throw new ServletException(e);
     }
 
-
   }
-
-  private void getConnection() throws ClassNotFoundException, SQLException {
-    Class.forName("com.mysql.jdbc.Driver");
-    connection = DriverManager.getConnection("jdbc:mysql://localhost/DBPROD", "admin", "1234");
-  }
-
 }
