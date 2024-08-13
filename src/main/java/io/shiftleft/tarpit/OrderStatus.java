@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "simpleServlet", urlPatterns = {"/getOrderStatus"}, loadOnStartup = 1)
+@WebServlet(name = "simpleServlet", urlPatterns = { "/getOrderStatus" }, loadOnStartup = 1)
 public class OrderStatus extends HttpServlet {
 
   private static final long serialVersionUID = -3462096228274971485L;
@@ -81,6 +81,7 @@ public class OrderStatus extends HttpServlet {
           request.setAttribute("orderDetails", order);
 
           LOGGER.info("Order details are " + order);
+          LOGGER.info("Order " + orderId + " details are forwarded to dashboard ");
 
           getServletContext().getRequestDispatcher("/dashboard.jsp").forward(request, response);
 
@@ -101,7 +102,6 @@ public class OrderStatus extends HttpServlet {
     } catch (Exception e) {
       throw new ServletException(e);
     }
-
 
   }
 
