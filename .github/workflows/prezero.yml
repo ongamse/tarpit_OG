@@ -17,8 +17,8 @@ jobs:
         distribution: zulu
         java-version: 11
     
-    # - name: Package with maven
-    #   run: mvn clean install
+    - name: Package with maven
+      run: mvn clean install
    
     - name: Download ShiftLeft CLI
       run: |
