@@ -28,7 +28,7 @@ jobs:
     - name: preZero Static Analysis
       run: |
         ${GITHUB_WORKSPACE}/sl analyze --strict --wait \
-          --app tarpitOG \
+          --app tarpit_OG \
           --tag branch=${{ github.head_ref }} \
           --javasrc .
       env:
